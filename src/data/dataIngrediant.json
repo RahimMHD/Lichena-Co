@@ -1,0 +1,273 @@
+[
+    {   
+        "id": 0, 
+        "details": [
+            {
+                "title": "Matcha Latte",
+                "price": {
+                    "small": 5,
+                    "medium": 8,
+                    "large": 10
+                }, 
+                "image": "/public/cups coffee/pngwing.com (13).png",
+                "description": "Description for offer 1" 
+            },
+            {
+                "title": "Pink Drink",
+                "price": {
+                    "small": 5,
+                    "medium": 8,
+                    "large": 10
+                }, 
+                "image": "/public/cups coffee/pngwing.com (13).png",
+                "description": "Description for offer 1" 
+            },
+            {
+                "title": "Vanilla Sweet Cream Cold Brew",
+                "price": {
+                    "small": 5,
+                    "medium": 8,
+                    "large": 10
+                }, 
+                "image": "/public/cups coffee/pngwing.com (13).png",
+                "description": "Description for offer 1" 
+            },
+            {
+                "title": "Caramel Macchiato",
+                "price": {
+                    "small": 5,
+                    "medium": 8,
+                    "large": 10
+                }, 
+                "image": "/public/cups coffee/pngwing.com (13).png",
+                "description": "Description for offer 1" 
+            },
+            {
+                "title": "Mango Dragonfruit Refresher",
+                "price": {
+                    "small": 5,
+                    "medium": 8,
+                    "large": 10
+                }, 
+                "image": "/public/cups coffee/pngwing.com (13).png",
+                "description": "Description for offer 1" 
+            },
+            {
+                "title": "Peppermint Mocha",
+                "price": {
+                    "small": 5,
+                    "medium": 8,
+                    "large": 10
+                }, 
+                "image": "/public/cups coffee/pngwing.com (13).png",
+                "description": "Description for offer 1" 
+            },
+            {
+                "title": "Peppermint Mocha",
+                "price": {
+                    "small": 5,
+                    "medium": 8,
+                    "large": 10
+                }, 
+                "image": "/public/cups coffee/pngwing.com (13).png",
+                "description": "Description for offer 1" 
+            }
+        ]
+
+    },
+    {   
+        "id": 1, 
+        "details": [
+            {
+                "title": "FOOD", 
+                "price": {
+                    "small": 5,
+                    "medium": 8,
+                    "large": 10
+                }, 
+                "image": "/public/cups coffee/pngwing.com (4).png", 
+                "description": "Description for offer 2" 
+            },
+            {
+                "title": "FOOD", 
+                "price": {
+                    "small": 5,
+                    "medium": 8,
+                    "large": 10
+                }, 
+                "image": "/public/cups coffee/pngwing.com (4).png", 
+                "description": "Description for offer 2" 
+            },
+            {
+                "title": "FOOD", 
+                "price": {
+                    "small": 5,
+                    "medium": 8,
+                    "large": 10
+                }, 
+                "image": "/public/cups coffee/pngwing.com (4).png", 
+                "description": "Description for offer 2" 
+            },
+            {
+                "title": "FOOD", 
+                "price": {
+                    "small": 5,
+                    "medium": 8,
+                    "large": 10
+                }, 
+                "image": "/public/cups coffee/pngwing.com (4).png", 
+                "description": "Description for offer 2" 
+            },
+            {
+                "title": "FOOD", 
+                "price": {
+                    "small": 5,
+                    "medium": 8,
+                    "large": 10
+                }, 
+                "image": "/public/cups coffee/pngwing.com (4).png", 
+                "description": "Description for offer 2" 
+            },
+            {
+                "title": "FOOD", 
+                "price": {
+                    "small": 5,
+                    "medium": 8,
+                    "large": 10
+                }, 
+                "image": "/public/cups coffee/pngwing.com (4).png", 
+                "description": "Description for offer 2" 
+            }
+        ]
+    },
+    {   
+        "id": 2, 
+        "details":[
+            {
+                "title": "AT HOME", 
+                "price": {
+                    "small": 5,
+                    "medium": 8,
+                    "large": 10
+                }, 
+                "image": "/public/cups coffee/pngwing.com (9).png", 
+                "description": "Description for offer 3" 
+            },
+            {
+                "title": "AT HOME", 
+                "price": {
+                    "small": 5,
+                    "medium": 8,
+                    "large": 10
+                }, 
+                "image": "/public/cups coffee/pngwing.com (9).png", 
+                "description": "Description for offer 3" 
+            },
+            {
+                "title": "AT HOME", 
+                "price": {
+                    "small": 5,
+                    "medium": 8,
+                    "large": 10
+                }, 
+                "image": "/public/cups coffee/pngwing.com (9).png", 
+                "description": "Description for offer 3" 
+            },
+            {
+                "title": "AT HOME", 
+                "price": {
+                    "small": 5,
+                    "medium": 8,
+                    "large": 10
+                }, 
+                "image": "/public/cups coffee/pngwing.com (9).png", 
+                "description": "Description for offer 3" 
+            }
+        ]
+    },
+    {   
+        "id": 3,
+        "details": [
+            {
+                "title": "MERCHANDISE", 
+                "price": {
+                    "small": 5,
+                    "medium": 8,
+                    "large": 10
+                }, 
+                "image": "/public/cups coffee/pngwing.com (11).png",
+                "description": "Description for offer 4" 
+            },
+            {
+                "title": "MERCHANDISE", 
+                "price": {
+                    "small": 5,
+                    "medium": 8,
+                    "large": 10
+                }, 
+                "image": "/public/cups coffee/pngwing.com (11).png",
+                "description": "Description for offer 4" 
+            },
+            {
+                "title": "MERCHANDISE", 
+                "price": {
+                    "small": 5,
+                    "medium": 8,
+                    "large": 10
+                }, 
+                "image": "/public/cups coffee/pngwing.com (11).png",
+                "description": "Description for offer 4" 
+            },
+            {
+                "title": "MERCHANDISE", 
+                "price": {
+                    "small": 5,
+                    "medium": 8,
+                    "large": 10
+                }, 
+                "image": "/public/cups coffee/pngwing.com (11).png",
+                "description": "Description for offer 4" 
+            },
+            {
+                "title": "MERCHANDISE", 
+                "price": {
+                    "small": 5,
+                    "medium": 8,
+                    "large": 10
+                }, 
+                "image": "/public/cups coffee/pngwing.com (11).png",
+                "description": "Description for offer 4" 
+            },
+            {
+                "title": "MERCHANDISE", 
+                "price": {
+                    "small": 5,
+                    "medium": 8,
+                    "large": 10
+                }, 
+                "image": "/public/cups coffee/pngwing.com (11).png",
+                "description": "Description for offer 4" 
+            },
+            {
+                "title": "MERCHANDISE", 
+                "price": {
+                    "small": 5,
+                    "medium": 8,
+                    "large": 10
+                }, 
+                "image": "/public/cups coffee/pngwing.com (11).png",
+                "description": "Description for offer 4" 
+            },
+            {
+                "title": "MERCHANDISE", 
+                "price": {
+                    "small": 5,
+                    "medium": 8,
+                    "large": 10
+                }, 
+                "image": "/public/cups coffee/pngwing.com (11).png",
+                "description": "Description for offer 4" 
+            }
+        ]
+    }
+]
