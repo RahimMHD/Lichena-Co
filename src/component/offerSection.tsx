@@ -2,167 +2,173 @@ import React, { useState, useRef, useEffect } from 'react'
 import Offers from './offers'
 import { IoIosArrowForward } from 'react-icons/io'
 import gsap from 'gsap';
-import { Flip } from 'gsap/all';
-
-gsap.registerPlugin(Flip);
 
 function OfferSection() {
     const [selectedOption, setSelectedOption] = useState<string>('DRINKS');
     const [listOffers, setListOffers] = useState<number>(0);
-    const containerRef = useRef<HTMLUListElement>(null);
+    const [centerIndex, setCenterIndex] = useState<number>(0);
+    const containerRef = useRef<HTMLDivElement>(null);
     const isAnimatingRef = useRef<boolean>(false);
+    const totalCards = useRef<number>(0);
+    const currentX = useRef<number>(0);
+    // Track how many times we actually scrolled the track (not just scaled)
+    const scrolledSteps = useRef<number>(0);
 
-    // Initialize cards after component mounts
-    useEffect(() => {
-        if (containerRef.current) {
-            const cards = gsap.utils.toArray(".cards", containerRef.current);
-            gsap.set(cards, { opacity: 1, scale: 1 }); // Ensure cards are visible
-        }
-    }, [listOffers]); // Re-run when offers change
+    const CARD_WIDTH = 270;
+    const CARD_GAP = 32;
+    const STEP = CARD_WIDTH + CARD_GAP;
 
-    const updateCaterpillar = (forward: boolean) => {
-        if (!containerRef.current || isAnimatingRef.current) return;
-        
-        isAnimatingRef.current = true;
-        const cards = gsap.utils.toArray(".cards", containerRef.current) as HTMLElement[];
-        
-        if (cards.length === 0) {
-            isAnimatingRef.current = false;
-            return;
-        }
+    const visibleCount = () => Math.floor(window.innerWidth / STEP);
 
-        const first = cards[0];
-        const last = cards[cards.length - 1];
-        const state = Flip.getState(cards, { props: "transform,opacity" });
-        
-        // Clone the element to animate
-        const newCard = forward ? first.cloneNode(true) as HTMLElement : last.cloneNode(true) as HTMLElement;
-        
-        // Set initial state for the new card
-        gsap.set(newCard, { 
-            scale: 0, 
-            opacity: 0,
-            position: 'absolute'
-        });
-
-        if (forward) {
-            // Move first to end
-            containerRef.current.appendChild(newCard);
-            gsap.set(first, { opacity: 0.5, scale: 0.8 });
-        } else {
-            // Move last to beginning
-            containerRef.current.insertBefore(newCard, cards[0]);
-            gsap.set(last, { opacity: 0.5, scale: 0.8 });
-        }
-
-        Flip.from(state, {
-            targets: cards,
-            duration: 0.7,
-            ease: "power2.inOut",
-            absolute: true,
-            nested: true,
-            onEnter: (elements) => {
-                // Animate the new card in
-                gsap.to(elements, {
-                    opacity: 1,
-                    scale: 1,
-                    duration: 0.5,
-                    ease: "back.out(1.7)",
-                    onComplete: () => {
-                        // Remove the original element that was moved
-                        if (forward) {
-                            containerRef.current?.removeChild(first);
-                        } else {
-                            containerRef.current?.removeChild(last);
-                        }
-                        isAnimatingRef.current = false;
-                    }
-                });
-            },
-            onLeave: (elements) => {
-                // Animate out the old position
-                gsap.to(elements, {
-                    opacity: 0,
-                    scale: 0,
-                    duration: 0.3,
-                    ease: "power2.in"
-                });
-            },
-            onComplete: () => {
-                // Clean up any absolute positioning
-                cards.forEach(card => {
-                    card.style.position = '';
-                    card.style.left = '';
-                    card.style.top = '';
-                });
-            }
-        });
+    // Right: should we scroll the track or just scale?
+    const shouldScrollRight = (nextIndex: number) => {
+        return nextIndex + visibleCount() < totalCards.current;
     };
 
+    // Left: should we scroll the track back, or just scale?
+    // Only scroll back if we had previously scrolled right
+    const shouldScrollLeft = () => {
+        return scrolledSteps.current > 0;
+    };
+
+    useEffect(() => {
+        if (!containerRef.current) return;
+        const cards = Array.from(containerRef.current.children) as HTMLElement[];
+        totalCards.current = cards.length;
+
+        cards.forEach((card, i) => {
+            const isCenter = i === centerIndex;
+
+            gsap.to(card, {
+                scale: isCenter ? 1.18 : 0.85,
+                opacity: isCenter ? 1 : 0.6,
+                backgroundColor: isCenter ? '#007545' : '#ffffff',
+                duration: 0.5,
+                ease: 'power2.out',
+            });
+
+            const texts = card.querySelectorAll('h2, h3, h4, p, button:not(.add-to-cart)');
+            texts.forEach((el) => {
+                gsap.to(el, { color: isCenter ? '#ffffff' : '', duration: 0.5 });
+            });
+
+            const prices = card.querySelectorAll('.text-green-600');
+            prices.forEach((el) => {
+                gsap.to(el, { color: isCenter ? '#000000' : '', duration: 0.5 });
+            });
+        });
+    }, [centerIndex, listOffers]);
+
     const scrollToLeft = () => {
-        updateCaterpillar(false);
+        if (isAnimatingRef.current || centerIndex <= 0) return;
+        isAnimatingRef.current = true;
+        const next = centerIndex - 1;
+        setCenterIndex(next);
+
+        if (shouldScrollLeft()) {
+            scrolledSteps.current -= 1;
+            currentX.current += STEP;
+            gsap.to(containerRef.current, {
+                x: currentX.current,
+                duration: 0.5,
+                ease: 'power2.inOut',
+                onComplete: () => { isAnimatingRef.current = false; }
+            });
+        } else {
+            // Cards on the left are already visible, just scale
+            isAnimatingRef.current = false;
+        }
     };
 
     const scrollToRight = () => {
-        updateCaterpillar(true);
+        if (isAnimatingRef.current || centerIndex >= totalCards.current - 1) return;
+        isAnimatingRef.current = true;
+        const next = centerIndex + 1;
+        setCenterIndex(next);
+
+        if (shouldScrollRight(next)) {
+            scrolledSteps.current += 1;
+            currentX.current -= STEP;
+            gsap.to(containerRef.current, {
+                x: currentX.current,
+                duration: 0.5,
+                ease: 'power2.inOut',
+                onComplete: () => { isAnimatingRef.current = false; }
+            });
+        } else {
+            // Last cards already visible, just scale
+            isAnimatingRef.current = false;
+        }
     };
+
+    useEffect(() => {
+        setCenterIndex(0);
+        currentX.current = 0;
+        scrolledSteps.current = 0;
+        if (containerRef.current) {
+            gsap.set(containerRef.current, { x: 0 });
+        }
+    }, [listOffers]);
 
     return (
         <main className='flex flex-col justify-center items-center w-full min-h-[800px] rounded-3xl pb-2'>
             <div className='flex justify-center px-1 py-8 w-[100%] rounded-3xl'>
                 <ul className='grid grid-cols-4 justify-center items-center w-[88%] gap-0 my-0 mb-14 mr-10'>
                     <li
-                        onClick={() => {setListOffers(0); setSelectedOption("DRINKS")}}
+                        onClick={() => { setListOffers(0); setSelectedOption("DRINKS") }}
                         className={`btn-offer w-[115%] h-[88px] flex justify-center items-center rounded-md rounded-br-[100px] hover:bg-white hover:text-[#007545] cursor-pointer transition duration-300 ease-in-out z-10
-                            ${selectedOption === 'DRINKS' ? 'bg-white text-[#007545] scale-110' : 'bg-[#007545] text-white'}
-                        `}
+                            ${selectedOption === 'DRINKS' ? 'bg-white text-[#007545] scale-110' : 'bg-[#007545] text-white'}`}
                     >
                         <p className='font-bold text-2xl'>DRINKS</p>
                     </li>
                     <li
-                        onClick={() => {setListOffers(1); setSelectedOption("FOOD")}}
-                        className={`btn-offer bg-[#007545] w-[115%] h-[88px] flex justify-center items-center rounded-md rounded-br-[100px] hover:bg-white hover:text-[#007545] cursor-pointer transition duration-300 ease-in-out
-                            ${selectedOption === "FOOD" ? 'bg-white text-[#007545] scale-110 z-10' : 'bg-[#007545] text-white z-9'} 
-                        `}
+                        onClick={() => { setListOffers(1); setSelectedOption("FOOD") }}
+                        className={`btn-offer w-[115%] h-[88px] flex justify-center items-center rounded-md rounded-br-[100px] hover:bg-white hover:text-[#007545] cursor-pointer transition duration-300 ease-in-out
+                            ${selectedOption === "FOOD" ? 'bg-white text-[#007545] scale-110 z-10' : 'bg-[#007545] text-white z-9'}`}
                     >
                         <p className='font-bold text-2xl'>FOOD</p>
                     </li>
                     <li
-                        onClick={() => {setListOffers(2); setSelectedOption("AT HOME")}}
-                        className={`btn-offer bg-[#007545] w-[115%] h-[88px] flex justify-center items-center rounded-md rounded-br-[100px] hover:bg-white hover:text-[#007545] cursor-pointer transition duration-300 ease-in-out
-                            ${selectedOption === "AT HOME" ? 'bg-white text-[#007545] scale-110 z-10' : 'bg-[#007545] text-white z-8'} 
-                        `}
+                        onClick={() => { setListOffers(2); setSelectedOption("AT HOME") }}
+                        className={`btn-offer w-[115%] h-[88px] flex justify-center items-center rounded-md rounded-br-[100px] hover:bg-white hover:text-[#007545] cursor-pointer transition duration-300 ease-in-out
+                            ${selectedOption === "AT HOME" ? 'bg-white text-[#007545] scale-110 z-10' : 'bg-[#007545] text-white z-8'}`}
                     >
                         <p className='font-bold text-2xl'>AT HOME</p>
                     </li>
                     <li
-                        onClick={() => {setListOffers(3); setSelectedOption("MERCHANDISE")}}
-                        className={`btn-offer bg-[#007545] w-[115%] h-[88px] flex justify-center items-center rounded-md rounded-br-[100px] hover:bg-white hover:text-[#007545] cursor-pointer transition duration-300 ease-in-out
-                            ${selectedOption === "MERCHANDISE" ? 'bg-white text-[#007545] scale-110 z-10' : 'bg-[#007545] text-white z-7'} 
-                        `}
+                        onClick={() => { setListOffers(3); setSelectedOption("MERCHANDISE") }}
+                        className={`btn-offer w-[115%] h-[88px] flex justify-center items-center rounded-md rounded-br-[100px] hover:bg-white hover:text-[#007545] cursor-pointer transition duration-300 ease-in-out
+                            ${selectedOption === "MERCHANDISE" ? 'bg-white text-[#007545] scale-110 z-10' : 'bg-[#007545] text-white z-7'}`}
                     >
                         <p className='font-bold text-2xl'>MERCHANDISE</p>
                     </li>
                 </ul>
             </div>
-            <div className='gallery relative z-1 offer-container w-12/12 h-[650px] flex justify-center items-center overflow-hidden'>
-                <IoIosArrowForward 
+
+            <div className='gallery relative z-1 offer-container w-full h-[650px] flex justify-center items-center overflow-hidden'>
+                <IoIosArrowForward
                     onClick={scrollToLeft}
-                    size={40} 
-                    className='prev scroll-button-right w-10 h-10 flex justify-center items-center bg-[#007545] text-white font-bold rounded-full absolute left-4 top-[50%] rotate-180 cursor-pointer hover:scale-125 transition-all duration-200 z-20'
+                    size={40}
+                    className={`prev scroll-button-right w-10 h-10 flex justify-center items-center bg-[#007545] text-white font-bold rounded-full absolute left-4 top-[50%] rotate-180 cursor-pointer transition-all duration-200 z-20
+                        ${centerIndex <= 0 ? 'opacity-30 pointer-events-none' : 'hover:scale-125'}`}
                 />
-                
-                <ul
+
+                <div
                     ref={containerRef}
-                    className='container scroll-container relative z-1 offer-container w-full h-full flex items-center py-32 px-4 gap-8 mt-8 mb-24'
+                    className='flex items-center gap-8'
+                    style={{
+                        position: 'absolute',
+                        left: `calc(50% - ${CARD_WIDTH * 2.2}px)`,
+                    }}
                 >
                     <Offers selectedOffer={listOffers} />
-                </ul>
-                
-                <IoIosArrowForward 
+                </div>
+
+                <IoIosArrowForward
                     onClick={scrollToRight}
-                    size={40} 
-                    className='next scroll-button-left w-10 h-10 flex justify-center items-center bg-[#007545] text-white font-bold rounded-full absolute right-4 top-[50%] cursor-pointer hover:scale-125 transition-all duration-200 z-20'
+                    size={40}
+                    className={`next scroll-button-left w-10 h-10 flex justify-center items-center bg-[#007545] text-white font-bold rounded-full absolute right-4 top-[50%] cursor-pointer transition-all duration-200 z-20
+                        ${centerIndex + 1 === totalCards.current ? 'opacity-30 pointer-events-none' : 'hover:scale-125'}`}
                 />
             </div>
         </main>
@@ -170,46 +176,3 @@ function OfferSection() {
 }
 
 export default OfferSection;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // // scrolltoleft when clicking the left arrow
-    // const scrollToLeft = () => {
-    //     const parent = document.querySelector('.scroll-container');
-
-    //     parent && parent.scrollTo({left: 660, behavior: 'smooth'});
-    // };
-
-    // // scrolltoRight when clicking the right arrow
-    // const scrollToRight = () => {
-    //     const parent = document.querySelector('.scroll-container');
-
-    //     parent && parent.scrollTo({left: 0, behavior: 'smooth'});
-    // };
