@@ -1,178 +1,171 @@
 import React, { useState, useRef, useEffect } from 'react'
-import Offers from './offers'
 import { IoIosArrowForward } from 'react-icons/io'
-import gsap from 'gsap';
+import gsap from 'gsap'
+import myJsonData from '../data/dataIngrediant.json'
+import Offers from './offers'
+import { IoIosArrowForward as Arrow } from 'react-icons/io'
+
+interface OfferDetail {
+    image: string
+    title: string
+    price: { small: number; medium: number; large: number }
+}
 
 function OfferSection() {
-    const [selectedOption, setSelectedOption] = useState<string>('DRINKS');
-    const [listOffers, setListOffers] = useState<number>(0);
-    const [centerIndex, setCenterIndex] = useState<number>(0);
-    const containerRef = useRef<HTMLDivElement>(null);
-    const isAnimatingRef = useRef<boolean>(false);
-    const totalCards = useRef<number>(0);
-    const currentX = useRef<number>(0);
-    // Track how many times we actually scrolled the track (not just scaled)
-    const scrolledSteps = useRef<number>(0);
+    const [selectedOption, setSelectedOption] = useState<string>('DRINKS')
+    const [listOffers, setListOffers] = useState<number>(0)
 
-    const CARD_WIDTH = 270;
-    const CARD_GAP = 32;
-    const STEP = CARD_WIDTH + CARD_GAP;
+    const ulRef = useRef<HTMLUListElement>(null)
 
-    const visibleCount = () => Math.floor(window.innerWidth / STEP);
+    // GSAP refs — we store everything so we can kill & rebuild on category change
+    const seamlessLoopRef = useRef<gsap.core.Timeline | null>(null)
+    const scrubRef = useRef<gsap.core.Tween | null>(null)
+    const offsetRef = useRef({ offset: 0 })
+    const isAnimatingRef = useRef(false)
 
-    // Right: should we scroll the track or just scale?
-    const shouldScrollRight = (nextIndex: number) => {
-        return nextIndex + visibleCount() < totalCards.current;
-    };
+    const SPACING = 0.15 // stagger spacing between cards (same role as in GSAP demo)
 
-    // Left: should we scroll the track back, or just scale?
-    // Only scroll back if we had previously scrolled right
-    const shouldScrollLeft = () => {
-        return scrolledSteps.current > 0;
-    };
+    // ── animate function — defines how each card enters/exits ──
+    const animateFunc = (el: HTMLElement) => {
+        const tl = gsap.timeline()
+        tl.fromTo(
+            el,
+            { scale: 0, opacity: 0 },
+            {
+                scale: 1,
+                opacity: 1,
+                zIndex: 100,
+                duration: 0.5,
+                yoyo: true,
+                repeat: 1,
+                ease: 'power1.in',
+                immediateRender: false,
+            }
+        ).fromTo(
+            el,
+            { xPercent: 400 },
+            { xPercent: -400, duration: 1, ease: 'none', immediateRender: false },
+            0
+        )
+        return tl
+    }
 
+    // ── build / rebuild the seamless loop ──────────────────────────────────
+    const buildLoop = () => {
+        if (!ulRef.current) return
+
+        // kill previous
+        seamlessLoopRef.current?.kill()
+        scrubRef.current?.kill()
+        offsetRef.current.offset = 0
+
+        const items = Array.from(ulRef.current.children) as HTMLElement[]
+
+        // set initial state (same as GSAP demo)
+        gsap.set(items, { xPercent: 400, opacity: 0, scale: 0 })
+
+        const loop = buildSeamlessLoop(items, SPACING, animateFunc)
+        seamlessLoopRef.current = loop
+
+        const snapTime = gsap.utils.snap(SPACING)
+        const wrapTime = gsap.utils.wrap(0, loop.duration())
+
+        const scrub = gsap.to(offsetRef.current, {
+            offset: 0,
+            onUpdate() {
+                loop.time(wrapTime(offsetRef.current.offset))
+            },
+            duration: 0.5,
+            ease: 'power3',
+            paused: true,
+        })
+        scrubRef.current = scrub
+
+        // snap to card 0 on init
+        scrub.vars.offset = 0
+        scrub.invalidate().restart()
+    }
+
+    // rebuild when category changes
     useEffect(() => {
-        if (!containerRef.current) return;
-        const cards = Array.from(containerRef.current.children) as HTMLElement[];
-        totalCards.current = cards.length;
+        // wait one tick so React has rendered the new <li> elements
+        const id = setTimeout(buildLoop, 0)
+        return () => clearTimeout(id)
+    }, [listOffers])
 
-        cards.forEach((card, i) => {
-            const isCenter = i === centerIndex;
+    // ── scroll to a specific offset (same as GSAP demo's scrollToOffset) ──
+    const scrollToOffset = (offset: number) => {
+        if (!seamlessLoopRef.current || !scrubRef.current) return
+        const snapTime = gsap.utils.snap(SPACING)
+        const snapped = snapTime(offset)
+        scrubRef.current.vars.offset = snapped
+        scrubRef.current.invalidate().restart()
+    }
 
-            gsap.to(card, {
-                scale: isCenter ? 1.18 : 0.85,
-                opacity: isCenter ? 1 : 0.6,
-                backgroundColor: isCenter ? '#007545' : '#ffffff',
-                duration: 0.5,
-                ease: 'power2.out',
-            });
+    const goNext = () => scrollToOffset(offsetRef.current.offset + SPACING)
+    const goPrev = () => scrollToOffset(offsetRef.current.offset - SPACING)
 
-            const texts = card.querySelectorAll('h2, h3, h4, p, button:not(.add-to-cart)');
-            texts.forEach((el) => {
-                gsap.to(el, { color: isCenter ? '#ffffff' : '', duration: 0.5 });
-            });
+    const changeCategory = (label: string, index: number) => {
+        setSelectedOption(label)
+        setListOffers(index)
+    }
 
-            const prices = card.querySelectorAll('.text-green-600');
-            prices.forEach((el) => {
-                gsap.to(el, { color: isCenter ? '#000000' : '', duration: 0.5 });
-            });
-        });
-    }, [centerIndex, listOffers]);
-
-    const scrollToLeft = () => {
-        if (isAnimatingRef.current || centerIndex <= 0) return;
-        isAnimatingRef.current = true;
-        const next = centerIndex - 1;
-        setCenterIndex(next);
-
-        if (shouldScrollLeft()) {
-            scrolledSteps.current -= 1;
-            currentX.current += STEP;
-            gsap.to(containerRef.current, {
-                x: currentX.current,
-                duration: 0.5,
-                ease: 'power2.inOut',
-                onComplete: () => { isAnimatingRef.current = false; }
-            });
-        } else {
-            // Cards on the left are already visible, just scale
-            isAnimatingRef.current = false;
-        }
-    };
-
-    const scrollToRight = () => {
-        if (isAnimatingRef.current || centerIndex >= totalCards.current - 1) return;
-        isAnimatingRef.current = true;
-        const next = centerIndex + 1;
-        setCenterIndex(next);
-
-        if (shouldScrollRight(next)) {
-            scrolledSteps.current += 1;
-            currentX.current -= STEP;
-            gsap.to(containerRef.current, {
-                x: currentX.current,
-                duration: 0.5,
-                ease: 'power2.inOut',
-                onComplete: () => { isAnimatingRef.current = false; }
-            });
-        } else {
-            // Last cards already visible, just scale
-            isAnimatingRef.current = false;
-        }
-    };
-
-    useEffect(() => {
-        setCenterIndex(0);
-        currentX.current = 0;
-        scrolledSteps.current = 0;
-        if (containerRef.current) {
-            gsap.set(containerRef.current, { x: 0 });
-        }
-    }, [listOffers]);
+    const currentOffer = (myJsonData as any)[listOffers]
 
     return (
         <main className='flex flex-col justify-center items-center w-full min-h-[800px] rounded-3xl pb-2'>
-            <div className='flex justify-center px-1 py-8 w-[100%] rounded-3xl'>
+
+            {/* ── Category tabs ── */}
+            <div className='flex justify-center px-1 py-8 w-full rounded-3xl'>
                 <ul className='grid grid-cols-4 justify-center items-center w-[88%] gap-0 my-0 mb-14 mr-10'>
-                    <li
-                        onClick={() => { setListOffers(0); setSelectedOption("DRINKS") }}
-                        className={`btn-offer w-[115%] h-[88px] flex justify-center items-center rounded-md rounded-br-[100px] hover:bg-white hover:text-[#007545] cursor-pointer transition duration-300 ease-in-out z-10
-                            ${selectedOption === 'DRINKS' ? 'bg-white text-[#007545] scale-110' : 'bg-[#007545] text-white'}`}
-                    >
-                        <p className='font-bold text-2xl'>DRINKS</p>
-                    </li>
-                    <li
-                        onClick={() => { setListOffers(1); setSelectedOption("FOOD") }}
-                        className={`btn-offer w-[115%] h-[88px] flex justify-center items-center rounded-md rounded-br-[100px] hover:bg-white hover:text-[#007545] cursor-pointer transition duration-300 ease-in-out
-                            ${selectedOption === "FOOD" ? 'bg-white text-[#007545] scale-110 z-10' : 'bg-[#007545] text-white z-9'}`}
-                    >
-                        <p className='font-bold text-2xl'>FOOD</p>
-                    </li>
-                    <li
-                        onClick={() => { setListOffers(2); setSelectedOption("AT HOME") }}
-                        className={`btn-offer w-[115%] h-[88px] flex justify-center items-center rounded-md rounded-br-[100px] hover:bg-white hover:text-[#007545] cursor-pointer transition duration-300 ease-in-out
-                            ${selectedOption === "AT HOME" ? 'bg-white text-[#007545] scale-110 z-10' : 'bg-[#007545] text-white z-8'}`}
-                    >
-                        <p className='font-bold text-2xl'>AT HOME</p>
-                    </li>
-                    <li
-                        onClick={() => { setListOffers(3); setSelectedOption("MERCHANDISE") }}
-                        className={`btn-offer w-[115%] h-[88px] flex justify-center items-center rounded-md rounded-br-[100px] hover:bg-white hover:text-[#007545] cursor-pointer transition duration-300 ease-in-out
-                            ${selectedOption === "MERCHANDISE" ? 'bg-white text-[#007545] scale-110 z-10' : 'bg-[#007545] text-white z-7'}`}
-                    >
-                        <p className='font-bold text-2xl'>MERCHANDISE</p>
-                    </li>
+                    {[
+                        { label: 'DRINKS', i: 0 },
+                        { label: 'FOOD', i: 1 },
+                        { label: 'AT HOME', i: 2 },
+                        { label: 'MERCHANDISE', i: 3 },
+                    ].map(({ label, i }) => (
+                        <li
+                            key={label}
+                            onClick={() => changeCategory(label, i)}
+                            className={`btn-offer w-[115%] h-[88px] flex justify-center items-center rounded-md rounded-br-[100px] cursor-pointer transition duration-300 ease-in-out
+                                ${selectedOption === label
+                                    ? 'bg-white text-[#007545] scale-110 z-10'
+                                    : 'bg-[#007545] text-white hover:bg-white hover:text-[#007545]'
+                                }`}
+                        >
+                            <p className='font-bold text-2xl'>{label}</p>
+                        </li>
+                    ))}
                 </ul>
             </div>
 
-            <div className='gallery relative z-1 offer-container w-full h-[650px] flex justify-center items-center overflow-hidden'>
+            {/* ── Carousel ── */}
+            <div className='gallery relative w-full h-[650px] flex justify-center items-center overflow-hidden'>
+
                 <IoIosArrowForward
-                    onClick={scrollToLeft}
+                    onClick={goPrev}
                     size={40}
-                    className={`prev scroll-button-right w-10 h-10 flex justify-center items-center bg-[#007545] text-white font-bold rounded-full absolute left-4 top-[50%] rotate-180 cursor-pointer transition-all duration-200 z-20
-                        ${centerIndex <= 0 ? 'opacity-30 pointer-events-none' : 'hover:scale-125'}`}
+                    className='prev w-10 h-10 bg-[#007545] text-white rounded-full absolute left-4 top-1/2 -translate-y-1/2 rotate-180 cursor-pointer hover:scale-125 transition-all duration-200 z-20'
                 />
 
-                <div
-                    ref={containerRef}
-                    className='flex items-center gap-8'
-                    style={{
-                        position: 'absolute',
-                        left: `calc(50% - ${CARD_WIDTH * 2.2}px)`,
-                    }}
+                {/* The cards list — position relative so absolute children stack correctly */}
+                <ul
+                    ref={ulRef}
+                    className='cards relative w-full h-full list-none p-0 m-0'
                 >
-                    <Offers selectedOffer={listOffers} />
-                </div>
+                    {currentOffer.details.map((offer: OfferDetail, index: number) => (
+                        <Offers key={`${listOffers}-${index}`} offer={offer} selectedOffer={listOffers} />
+                    ))}
+                </ul>
 
                 <IoIosArrowForward
-                    onClick={scrollToRight}
+                    onClick={goNext}
                     size={40}
-                    className={`next scroll-button-left w-10 h-10 flex justify-center items-center bg-[#007545] text-white font-bold rounded-full absolute right-4 top-[50%] cursor-pointer transition-all duration-200 z-20
-                        ${centerIndex + 1 === totalCards.current ? 'opacity-30 pointer-events-none' : 'hover:scale-125'}`}
+                    className='next w-10 h-10 bg-[#007545] text-white rounded-full absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer hover:scale-125 transition-all duration-200 z-20'
                 />
             </div>
         </main>
     )
 }
 
-export default OfferSection;
+export default OfferSection

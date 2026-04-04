@@ -2,6 +2,9 @@
 
 
 function infoCoffee() {
+
+  const lechenaNimationArray = ["LECHENA-&-CO", "LECHENA-&-CO", "LECHENA-&-CO", "LECHENA-&-CO"]
+
   return (
     <div className='w-full h-[100vh] relative'>
       <div className='absolute top-0 right-[-20px] opacity-50 z-0'>
@@ -24,11 +27,10 @@ function infoCoffee() {
         <p className="font-extralight text-sm">Indulge in the perfect blend of coffee and ice - the Frappuccino    your cool coffee recape. Elevate your coffee moment with a creamy. Icy Frappuccino Ought,</p>
       </div>
 
-      <ul className="absolute left-[-10rem] bottom-20 flex justify-evenly items-center gap-12 bg-[#007545] p-2 w-[120rem] tracking-wide -rotate-6 z-26">
-        <li className="text-[45px] font-extrabold p-2">LECHENA & CO</li>
-        <li className="text-[45px] font-extrabold p-2">LECHENA & CO</li>
-        <li className="text-[45px] font-extrabold p-2">LECHENA & CO</li>
-        <li className="text-[45px] font-extrabold p-2">LECHENA & CO</li>
+      <ul className="flex gap-10 bg-[#007545] px-20 -ml-20 -mt-52 p-2 tracking-wide -rotate-6 z-26 animate-infinite-scroll">
+        {[...lechenaNimationArray, ...lechenaNimationArray].map((ele, ind) => (
+          <li key={ind} className="w-full flex flex-wrap text-[45px] font-extrabold">{ele}</li>
+        ))}
       </ul>
 
       <div className='absolute bottom-[-180px] left-0 opacity-50 z-0'>

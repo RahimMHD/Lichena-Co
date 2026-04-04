@@ -3,7 +3,13 @@ import { IoIosArrowForward } from 'react-icons/io';
 import myJsonData from '../data/dataIngrediant.json';
 import type { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, Key } from "react";
 
-export default function Offers({ selectedOffer }: { selectedOffer: number }) {
+interface OfferDetail {
+    image: string
+    title: string
+    price: { small: number; medium: number; large: number }
+}
+
+export default function Offers({offer}: { offer: OfferDetail }, { selectedOffer }: { selectedOffer: number }) {
     
     const currentOffer = myJsonData[selectedOffer];
 
@@ -11,7 +17,7 @@ export default function Offers({ selectedOffer }: { selectedOffer: number }) {
         return (
             <div 
                 key={index} 
-                className="cards group offer-detail min-w-[255px] max-w-[270px] h-full bg-white text-[#0C2529] font-bold rounded-2xl px-4 pt-40 flex flex-col items-center gap-4 overflow-x-visible relative cursor-pointer hover:bg-green-700 hover:text-white hover:scale-117 transition-all duration-300"
+                className="cards group offer-detail min-w-[255px] max-w-[270px] h-full bg-white text-[#0C2529] font-bold rounded-2xl px-4 pt-40 flex flex-col items-center gap-4 overflow-x-visible relative cursor-pointer hover:bg-green-700 hover:scale-117 transition-all duration-300"
             >
                 {/* ... rest of your card content */}
                 <img 
