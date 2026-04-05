@@ -2,8 +2,9 @@ import React, { useState, useRef, useEffect } from 'react'
 import { IoIosArrowForward } from 'react-icons/io'
 import gsap from 'gsap'
 import myJsonData from '../data/dataIngrediant.json'
-import Offers from './offers'
+import Offers, { OfferCard } from './offers'
 import { IoIosArrowForward as Arrow } from 'react-icons/io'
+import buildSeamlessLoop from './buildSeamlessLoop'
 
 interface OfferDetail {
     image: string
@@ -18,10 +19,10 @@ function OfferSection() {
     const ulRef = useRef<HTMLUListElement>(null)
 
     // GSAP refs — we store everything so we can kill & rebuild on category change
-    const seamlessLoopRef = useRef<gsap.core.Timeline | null>(null)
-    const scrubRef = useRef<gsap.core.Tween | null>(null)
-    const offsetRef = useRef({ offset: 0 })
-    const isAnimatingRef = useRef(false)
+    const seamlessLoopRef: React.MutableRefObject<gsap.core.Timeline | null> = useRef<gsap.core.Timeline | null>(null)
+    const scrubRef: React.MutableRefObject<gsap.core.Tween | null> = useRef<gsap.core.Tween | null>(null)
+    const offsetRef: React.MutableRefObject<{ offset: 0 }> = useRef({ offset: 0 })
+    const isAnimatingRef: React.MutableRefObject<boolean> = useRef(false)
 
     const SPACING = 0.15 // stagger spacing between cards (same role as in GSAP demo)
 
@@ -64,7 +65,7 @@ function OfferSection() {
         // set initial state (same as GSAP demo)
         gsap.set(items, { xPercent: 400, opacity: 0, scale: 0 })
 
-        const loop = buildSeamlessLoop(items, SPACING, animateFunc)
+        const loop: gsap.core.Timeline | null | any = buildSeamlessLoop(items, SPACING, animateFunc)
         seamlessLoopRef.current = loop
 
         const snapTime = gsap.utils.snap(SPACING)
@@ -154,7 +155,7 @@ function OfferSection() {
                     className='cards relative w-full h-full list-none p-0 m-0'
                 >
                     {currentOffer.details.map((offer: OfferDetail, index: number) => (
-                        <Offers key={`${listOffers}-${index}`} offer={offer} selectedOffer={listOffers} />
+                        <OfferCard key={`${listOffers}-${index}`} offer={offer} />
                     ))}
                 </ul>
 
@@ -169,3 +170,7 @@ function OfferSection() {
 }
 
 export default OfferSection
+
+// function buildSeamlessLoop(items: HTMLElement[], SPACING: number, animateFunc: (el: HTMLElement) => gsap.core.Timeline) {
+//     throw new Error('Function not implemented.')
+// }

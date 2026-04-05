@@ -1,6 +1,6 @@
 
 
-function buildSeamlessLoop(
+export default function buildSeamlessLoop(
     items: HTMLElement[],
     spacing: number,
     animateFunc: (el: HTMLElement) => gsap.core.Timeline
