@@ -1,133 +1,125 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { IoIosArrowForward } from 'react-icons/io'
 import gsap from 'gsap'
 import myJsonData from '../data/dataIngrediant.json'
-import Offers, { OfferCard } from './offers'
-import { IoIosArrowForward as Arrow } from 'react-icons/io'
-import buildSeamlessLoop from './buildSeamlessLoop'
+import { IoIosArrowForward as ArrowIcon } from 'react-icons/io'
 
-interface OfferDetail {
-    image: string
-    title: string
-    price: { small: number; medium: number; large: number }
+// Inline the card so we control keys properly
+function Card({ offer, position }: { offer: any, position: number }) {
+    // position: 0=center, ±1=adjacent, ±2+=hidden
+    const abs = Math.abs(position)
+    const scale = abs === 0 ? 1.15 : abs === 1 ? 0.92 : 0.75
+    const opacity = abs === 0 ? 1 : abs === 1 ? 0.85 : 0.4
+    const zIndex = abs === 0 ? 10 : abs === 1 ? 5 : 1
+    const isCenter = position === 0
+    const xOffset = position * 302 // CARD_WIDTH(270) + GAP(32)
+
+    return (
+        <div
+            style={{
+                position: 'absolute',
+                left: '50%',
+                transform: `translateX(calc(-50% + ${xOffset}px)) scale(${scale})`,
+                opacity,
+                zIndex,
+                transition: 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.6s ease',
+                minWidth: '255px',
+                maxWidth: '270px',
+                height: '80%',
+            }}
+            className={`cards group offer-detail rounded-2xl px-4 pt-32 flex flex-col items-center gap-4 overflow-visible relative cursor-pointer
+                ${isCenter ? 'bg-[#007545] text-white' : 'bg-white text-[#0C2529]'}`}
+        >
+            <img
+                src='../../public/Printing & Graphics Software & Clipart for sale _ eBay.jpg'
+                alt=""
+                className='absolute left-0 top-10 w-full h-[201px] z-20 bg-[#007545] rounded-2xl opacity-10'
+            />
+            <div className='z-22 flex justify-center items-center w-full h-[201px] absolute top-0 left-0'>
+                <img src={offer.image} alt="" className='w-8/12' />
+            </div>
+            <h2 className={`h-10 font-extrabold text-xl mb-2 mt-2 text-center ${isCenter ? 'text-white' : 'text-black'}`}>
+                {offer.title}
+            </h2>
+            <div className='price-size flex gap-20 justify-between items-center'>
+                <div className={`flex flex-col gap-2 text-extrabold text-lg ${isCenter ? 'text-white' : ''}`}>
+                    <h3>Small</h3>
+                    <h3>Medium</h3>
+                    <h3>Large</h3>
+                </div>
+                <div className={`flex flex-col items-end gap-2 text-extrabold text-lg ${isCenter ? 'text-black' : 'text-green-600'}`}>
+                    <h4>{offer.price.small}.0 $</h4>
+                    <h4>{offer.price.medium}.0 $</h4>
+                    <h4>{offer.price.large}.0 $</h4>
+                </div>
+            </div>
+            <button className={`group/item flex justify-center items-center cursor-pointer transition-colors duration-300 ${isCenter ? 'text-white' : 'text-green-500 hover:text-black'}`}>
+                Description
+                <ArrowIcon className='hover:transform group-hover/item:rotate-90 transition-transform duration-300' />
+            </button>
+            <button className={`absolute w-32 py-2 top-94 left-1/2 transform -translate-x-1/2 rounded-full cursor-pointer transition-all duration-200
+                ${isCenter ? 'bg-white text-green-700 hover:bg-gray-100' : 'bg-green-700 text-white hover:bg-green-800'}`}>
+                ADD TO CART
+            </button>
+        </div>
+    )
 }
 
 function OfferSection() {
     const [selectedOption, setSelectedOption] = useState<string>('DRINKS')
     const [listOffers, setListOffers] = useState<number>(0)
+    const [centerIndex, setCenterIndex] = useState<number>(0)
+    const isAnimatingRef = useRef<boolean>(false)
 
-    const ulRef = useRef<HTMLUListElement>(null)
+    const categories = [
+        { label: 'DRINKS', index: 0 },
+        { label: 'FOOD', index: 1 },
+        { label: 'AT HOME', index: 2 },
+        { label: 'MERCHANDISE', index: 3 },
+    ]
 
-    // GSAP refs — we store everything so we can kill & rebuild on category change
-    const seamlessLoopRef: React.MutableRefObject<gsap.core.Timeline | null> = useRef<gsap.core.Timeline | null>(null)
-    const scrubRef: React.MutableRefObject<gsap.core.Tween | null> = useRef<gsap.core.Tween | null>(null)
-    const offsetRef: React.MutableRefObject<{ offset: 0 }> = useRef({ offset: 0 })
-    const isAnimatingRef: React.MutableRefObject<boolean> = useRef(false)
+    const currentOffer = myJsonData[listOffers]
+    const cards = currentOffer.details
+    const total = cards.length
 
-    const SPACING = 0.15 // stagger spacing between cards (same role as in GSAP demo)
-
-    // ── animate function — defines how each card enters/exits ──
-    const animateFunc = (el: HTMLElement) => {
-        const tl = gsap.timeline()
-        tl.fromTo(
-            el,
-            { scale: 0, opacity: 0 },
-            {
-                scale: 1,
-                opacity: 1,
-                zIndex: 100,
-                duration: 0.5,
-                yoyo: true,
-                repeat: 1,
-                ease: 'power1.in',
-                immediateRender: false,
-            }
-        ).fromTo(
-            el,
-            { xPercent: 400 },
-            { xPercent: -400, duration: 1, ease: 'none', immediateRender: false },
-            0
-        )
-        return tl
+    // position relative to center: -2, -1, 0, 1, 2 ...
+    const getPosition = (cardIndex: number) => {
+        let pos = cardIndex - centerIndex
+        // Wrap to shortest path for infinite feel
+        if (pos > total / 2) pos -= total
+        if (pos < -total / 2) pos += total
+        return pos
     }
 
-    // ── build / rebuild the seamless loop ──────────────────────────────────
-    const buildLoop = () => {
-        if (!ulRef.current) return
-
-        // kill previous
-        seamlessLoopRef.current?.kill()
-        scrubRef.current?.kill()
-        offsetRef.current.offset = 0
-
-        const items = Array.from(ulRef.current.children) as HTMLElement[]
-
-        // set initial state (same as GSAP demo)
-        gsap.set(items, { xPercent: 400, opacity: 0, scale: 0 })
-
-        const loop: gsap.core.Timeline | null | any = buildSeamlessLoop(items, SPACING, animateFunc)
-        seamlessLoopRef.current = loop
-
-        const snapTime = gsap.utils.snap(SPACING)
-        const wrapTime = gsap.utils.wrap(0, loop.duration())
-
-        const scrub = gsap.to(offsetRef.current, {
-            offset: 0,
-            onUpdate() {
-                loop.time(wrapTime(offsetRef.current.offset))
-            },
-            duration: 0.5,
-            ease: 'power3',
-            paused: true,
-        })
-        scrubRef.current = scrub
-
-        // snap to card 0 on init
-        scrub.vars.offset = 0
-        scrub.invalidate().restart()
+    const scrollToRight = () => {
+        if (isAnimatingRef.current) return
+        isAnimatingRef.current = true
+        setCenterIndex(prev => (prev + 1) % total)
+        setTimeout(() => { isAnimatingRef.current = false }, 650)
     }
 
-    // rebuild when category changes
-    useEffect(() => {
-        // wait one tick so React has rendered the new <li> elements
-        const id = setTimeout(buildLoop, 0)
-        return () => clearTimeout(id)
-    }, [listOffers])
-
-    // ── scroll to a specific offset (same as GSAP demo's scrollToOffset) ──
-    const scrollToOffset = (offset: number) => {
-        if (!seamlessLoopRef.current || !scrubRef.current) return
-        const snapTime = gsap.utils.snap(SPACING)
-        const snapped = snapTime(offset)
-        scrubRef.current.vars.offset = snapped
-        scrubRef.current.invalidate().restart()
+    const scrollToLeft = () => {
+        if (isAnimatingRef.current) return
+        isAnimatingRef.current = true
+        setCenterIndex(prev => (prev - 1 + total) % total)
+        setTimeout(() => { isAnimatingRef.current = false }, 650)
     }
-
-    const goNext = () => scrollToOffset(offsetRef.current.offset + SPACING)
-    const goPrev = () => scrollToOffset(offsetRef.current.offset - SPACING)
 
     const changeCategory = (label: string, index: number) => {
         setSelectedOption(label)
         setListOffers(index)
+        setCenterIndex(0)
     }
-
-    const currentOffer = (myJsonData as any)[listOffers]
 
     return (
         <main className='flex flex-col justify-center items-center w-full min-h-[800px] rounded-3xl pb-2'>
-
-            {/* ── Category tabs ── */}
+            {/* Category tabs */}
             <div className='flex justify-center px-1 py-8 w-full rounded-3xl'>
                 <ul className='grid grid-cols-4 justify-center items-center w-[88%] gap-0 my-0 mb-14 mr-10'>
-                    {[
-                        { label: 'DRINKS', i: 0 },
-                        { label: 'FOOD', i: 1 },
-                        { label: 'AT HOME', i: 2 },
-                        { label: 'MERCHANDISE', i: 3 },
-                    ].map(({ label, i }) => (
+                    {categories.map(({ label, index }) => (
                         <li
                             key={label}
-                            onClick={() => changeCategory(label, i)}
+                            onClick={() => changeCategory(label, index)}
                             className={`btn-offer w-[115%] h-[88px] flex justify-center items-center rounded-md rounded-br-[100px] cursor-pointer transition duration-300 ease-in-out
                                 ${selectedOption === label
                                     ? 'bg-white text-[#007545] scale-110 z-10'
@@ -140,29 +132,29 @@ function OfferSection() {
                 </ul>
             </div>
 
-            {/* ── Carousel ── */}
-            <div className='gallery relative w-full h-[650px] flex justify-center items-center overflow-hidden'>
-
+            {/* Carousel */}
+            <div className='relative w-full h-[650px] flex justify-center items-center overflow-hidden'>
                 <IoIosArrowForward
-                    onClick={goPrev}
+                    onClick={scrollToLeft}
                     size={40}
-                    className='prev w-10 h-10 bg-[#007545] text-white rounded-full absolute left-4 top-1/2 -translate-y-1/2 rotate-180 cursor-pointer hover:scale-125 transition-all duration-200 z-20'
+                    className='absolute left-4 top-1/2 -translate-y-1/2 rotate-180 z-20 rounded-full bg-[#007545] text-white cursor-pointer hover:scale-125 transition-all duration-200'
                 />
 
-                {/* The cards list — position relative so absolute children stack correctly */}
-                <ul
-                    ref={ulRef}
-                    className='cards relative w-full h-full list-none p-0 m-0'
-                >
-                    {currentOffer.details.map((offer: OfferDetail, index: number) => (
-                        <OfferCard key={`${listOffers}-${index}`} offer={offer} />
+                {/* Cards — all absolutely positioned relative to center */}
+                <div className='relative w-full h-full'>
+                    {cards.map((offer: any, i: number) => (
+                        <Card
+                            key={`${listOffers}-${i}`}
+                            offer={offer}
+                            position={getPosition(i)}
+                        />
                     ))}
-                </ul>
+                </div>
 
                 <IoIosArrowForward
-                    onClick={goNext}
+                    onClick={scrollToRight}
                     size={40}
-                    className='next w-10 h-10 bg-[#007545] text-white rounded-full absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer hover:scale-125 transition-all duration-200 z-20'
+                    className='absolute right-4 top-1/2 -translate-y-1/2 z-20 rounded-full bg-[#007545] text-white cursor-pointer hover:scale-125 transition-all duration-200'
                 />
             </div>
         </main>
@@ -170,7 +162,3 @@ function OfferSection() {
 }
 
 export default OfferSection
-
-// function buildSeamlessLoop(items: HTMLElement[], SPACING: number, animateFunc: (el: HTMLElement) => gsap.core.Timeline) {
-//     throw new Error('Function not implemented.')
-// }
