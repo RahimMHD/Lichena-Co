@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react'
+import React, { useState, useRef} from 'react'
 import { IoIosArrowForward } from 'react-icons/io'
 import gsap from 'gsap'
 import myJsonData from '../data/dataIngrediant.json'
@@ -22,20 +22,20 @@ function Card({ offer, position }: { offer: any, position: number }) {
                 transform: `translateX(calc(-50% + ${xOffset}px)) scale(${scale})`,
                 opacity,
                 zIndex,
-                transition: 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.6s ease',
+                transition: 'all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.6s ease',
                 minWidth: '255px',
                 maxWidth: '270px',
-                height: '80%',
+                height: '70%',
             }}
-            className={`cards group offer-detail rounded-2xl px-4 pt-32 flex flex-col items-center gap-4 overflow-visible relative cursor-pointer
-                ${isCenter ? 'bg-[#007545] text-white' : 'bg-white text-[#0C2529]'}`}
+            className={`cards group offer-detail rounded-2xl mt-16 font-bold flex flex-col items-center gap-4 overflow-visible relative cursor-pointer hover:border-2 hover:scale-102
+                ${isCenter ? 'bg-[#007545] text-white hover:border-white' : 'bg-white text-[#0C2529] hover:border-green-700'}`}
         >
             <img
                 src='../../public/Printing & Graphics Software & Clipart for sale _ eBay.jpg'
                 alt=""
-                className='absolute left-0 top-10 w-full h-[201px] z-20 bg-[#007545] rounded-2xl opacity-10'
+                className='left-0 top-10 w-full h-[209px] z-20 bg-[#007545] rounded-2xl opacity-10'
             />
-            <div className='z-22 flex justify-center items-center w-full h-[201px] absolute top-0 left-0'>
+            <div className='z-22 flex justify-center items-center w-full h-[201px] absolute -top-4 left-0'>
                 <img src={offer.image} alt="" className='w-8/12' />
             </div>
             <h2 className={`h-10 font-extrabold text-xl mb-2 mt-2 text-center ${isCenter ? 'text-white' : 'text-black'}`}>
@@ -57,7 +57,7 @@ function Card({ offer, position }: { offer: any, position: number }) {
                 Description
                 <ArrowIcon className='hover:transform group-hover/item:rotate-90 transition-transform duration-300' />
             </button>
-            <button className={`absolute w-32 py-2 top-94 left-1/2 transform -translate-x-1/2 rounded-full cursor-pointer transition-all duration-200
+            <button className={`absolute w-32 py-2 -bottom-7 left-1/2 transform -translate-x-1/2 rounded-full cursor-pointer transition-all duration-200
                 ${isCenter ? 'bg-white text-green-700 hover:bg-gray-100' : 'bg-green-700 text-white hover:bg-green-800'}`}>
                 ADD TO CART
             </button>
@@ -133,7 +133,7 @@ function OfferSection() {
             </div>
 
             {/* Carousel */}
-            <div className='relative w-full h-[650px] flex justify-center items-center overflow-hidden'>
+            <div className='relative my-20 w-full h-[680px] flex justify-center items-center overflow-hidden'>
                 <IoIosArrowForward
                     onClick={scrollToLeft}
                     size={40}

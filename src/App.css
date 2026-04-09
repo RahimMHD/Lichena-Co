@@ -27,6 +27,15 @@
   scrollbar-width: none; /* Firefox */
 }
 
+@keyframes infinite-scroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+.animate-infinite-scroll {
+    animation: infinite-scroll 8s linear infinite;
+}
+
 
 
 /* From Uiverse.io by vinodjangid07 */ 
