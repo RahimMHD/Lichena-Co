@@ -120,10 +120,11 @@ function OfferSection() {
                         <li
                             key={label}
                             onClick={() => changeCategory(label, index)}
+                            style={{ zIndex: selectedOption === label ? 20 + index : 10 - index }}
                             className={`btn-offer w-[115%] h-[88px] flex justify-center items-center rounded-md rounded-br-[100px] cursor-pointer transition duration-300 ease-in-out
                                 ${selectedOption === label
-                                    ? 'bg-white text-[#007545] scale-110 z-10'
-                                    : 'bg-[#007545] text-white hover:bg-white hover:text-[#007545]'
+                                    ? `bg-white text-[#007545] scale-110 z-20`
+                                    : `bg-[#007545] text-white hover:bg-white hover:text-[#007545]`
                                 }`}
                         >
                             <p className='font-bold text-2xl'>{label}</p>

@@ -9,7 +9,7 @@ function Locationsinfo() {
         <div>
             <div className='flex items-center gap-20'>
                 <div className='w-[224px] h-[640px] bg-white flex justify-center items-center ml-20'>
-                    <h1 className='font-bold rotate-[90deg] text-6xl text-[#007545] whitespace-nowrap'>OUR BRANCHES</h1>
+                    <h1 className='font-bold rotate-[-90deg] text-6xl text-[#007545] whitespace-nowrap'>OUR BRANCHES</h1>
                 </div>
                 <div className=''>
                     <div className='grid grid-cols-2 gap-x-16 gap-y-28 justify-items-center transition-all duration-300'>
