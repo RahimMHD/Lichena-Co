@@ -32,21 +32,23 @@ function LocationsCof() {
                             </div>
                         </div>
                     </div>
-                    <div className="w-72 h-72 rounded-2xl bg-white text-center flex flex-col justify-center relative hover:scale-105 hover:rounded-full transition-all duration-200 cursor-pointer">
-                        <img 
-                            src="../../public/cups coffee/pngwing.com (13).png" 
-                            alt="" 
-                            className="w-52 absolute -top-20 left-1/2 transform -translate-x-1/2"
-                        />
-                        <div className="w-full p-2 bg-[#007545] absolute top-52 left-0">
-                            <p className="text-2xl font-extrabold">VANILLA LITE</p>
-                        </div>
-                        <div className="bg-[#007545] px-8 py-2 rounded-full absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-lg font-bold">
-                            POPULAR
-                        </div>
+                    <div className="infoLocalCof w-72 h-72 cursor-pointer transition-all ease-in-out duration-200">
+                        <div className="w-full h-full rounded-2xl bg-white text-center flex flex-col justify-center relative">
+                            <img 
+                                src="../../public/cups coffee/pngwing.com (13).png" 
+                                alt="" 
+                                className="w-52 absolute -top-20 left-1/2 transform -translate-x-1/2"
+                            />
+                            <div className="w-full p-2 bg-[#007545] absolute top-52 left-0">
+                                <p className="text-2xl font-extrabold">VANILLA LITE</p>
+                            </div>
+                            <div className="bg-[#007545] px-8 py-2 rounded-full absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-lg font-bold">
+                                POPULAR
+                            </div>
+                        </div>    
                     </div>
-                    <div className="w-72 h-72 cursor-pointer group">
-                        <div className="w-full h-full rounded-2xl bg-white text-center flex flex-col justify-center relative group-hover:scale-105 group-hover:rounded-full transition-all duration-200">
+                    <div className="infoLocalCof w-72 h-72 cursor-pointer transition-all ease-in-out duration-200">
+                        <div className="w-full h-full rounded-2xl bg-white text-center flex flex-col justify-center relative">
                             <img 
                                 src="../../public/cups coffee/pngwing.com (13).png" 
                                 alt="" 
