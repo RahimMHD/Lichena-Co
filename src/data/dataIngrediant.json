@@ -10,7 +10,23 @@
                     "large": 10
                 }, 
                 "image": "/public/cups coffee/pngwing.com (13).png",
-                "description": "Description for offer 1" 
+                "description": "Description for offer 1" ,
+                "typeLocations": [{
+                    "city": "ADDIS ABABA",
+                    "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
+                },
+                {
+                    "city": "NEW YORK",
+                    "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
+                },
+                {
+                    "city": "LONDON",
+                    "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
+                },
+                {
+                    "city": "TOKYO",
+                    "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
+                }]
             },
             {
                 "title": "Pink Drink",
@@ -20,7 +36,23 @@
                     "large": 10
                 }, 
                 "image": "/public/cups coffee/pngwing.com (13).png",
-                "description": "Description for offer 1" 
+                "description": "Description for offer 1" ,
+                "typeLocations": [{
+                    "city": "PARIS",
+                    "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
+                },
+                {
+                    "city": "NEW YORK",
+                    "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
+                },
+                {
+                    "city": "ISTANBUL",
+                    "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
+                },
+                {
+                    "city": "TOKYO",
+                    "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
+                }]
             },
             {
                 "title": "Vanilla Sweet Cream Cold Brew",
@@ -30,7 +62,28 @@
                     "large": 10
                 }, 
                 "image": "/public/cups coffee/pngwing.com (13).png",
-                "description": "Description for offer 1" 
+                "description": "Description for offer 1" ,
+                "typeLocations": [{
+                    "city": "ADDIS ABABA",
+                    "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
+                },
+                {
+                    "city": "NEW YORK",
+                    "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
+                },
+                {
+                    "city": "LONDON",
+                    "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
+                },
+                {
+                    "city": "TOKYO",
+                    "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
+                },
+                {
+                    "city": "PARIS",
+                    "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
+                }
+            ]
             },
             {
                 "title": "Caramel Macchiato",
@@ -40,7 +93,23 @@
                     "large": 10
                 }, 
                 "image": "/public/cups coffee/pngwing.com (13).png",
-                "description": "Description for offer 1" 
+                "description": "Description for offer 1" ,
+                "typeLocations": [{
+                    "city": "MOSCOW",
+                    "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
+                },
+                {
+                    "city": "NEW YORK",
+                    "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
+                },
+                {
+                    "city": "LONDON",
+                    "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
+                },
+                {
+                    "city": "PARIS",
+                    "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
+                }]
             },
             {
                 "title": "Mango Dragonfruit Refresher",
