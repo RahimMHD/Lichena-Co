@@ -16,8 +16,8 @@ const App = () => {
     <NavBar />
     <Section />
     <OfferSection />
-    <InfoCoffee />
     <LocationsCof />
+    <InfoCoffee />
     <ContactInfo />
     
 

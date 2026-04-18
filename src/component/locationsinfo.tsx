@@ -6,48 +6,6 @@ function Locationsinfo() {
     const [showMore, setShowMore] = useState(false);
     
 
-    const locations = [{
-        type: "MOCHA BREW",
-        typeLocations: [{
-                "city": "ADDIS ABABA",
-                "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
-            },
-            {
-                "city": "NEW YORK",
-                "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
-            },
-            {
-                "city": "LONDON",
-                "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
-            },
-            {
-                "city": "TOKYO",
-                "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
-            }]
-        },
-        {
-            type: "VANILLA LITE",
-            typeLocations: [{
-                "city": "ISTANBUL",
-                "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
-            }]
-        },
-        {
-            type: "CARAMEL MACCHIATO",
-            typeLocations: [{
-                "city": "SYDNEY",
-                "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
-            }]
-        },
-        {
-            type: "SWEET CINNAMON",
-            typeLocations: [{
-                "city": "PARIS",
-                "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
-            }]
-        }
-    ]
-
     return (
         <div>
             <div className='flex items-center gap-20'>
