@@ -11,7 +11,7 @@
                 }, 
                 "image": "/public/cups coffee/pngwing.com (13).png",
                 "description": "Description for offer 1" ,
-                "typeLocations": [{
+                "branches": [{
                     "city": "ADDIS ABABA",
                     "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
                 },
@@ -26,6 +26,10 @@
                 {
                     "city": "TOKYO",
                     "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
+                },
+                {
+                    "city": "PARIS",
+                    "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
                 }]
             },
             {
@@ -37,12 +41,12 @@
                 }, 
                 "image": "/public/cups coffee/pngwing.com (13).png",
                 "description": "Description for offer 1" ,
-                "typeLocations": [{
+                "branches": [{
                     "city": "PARIS",
                     "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
                 },
                 {
-                    "city": "NEW YORK",
+                    "city": "MILAN",
                     "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
                 },
                 {
@@ -63,7 +67,7 @@
                 }, 
                 "image": "/public/cups coffee/pngwing.com (13).png",
                 "description": "Description for offer 1" ,
-                "typeLocations": [{
+                "branches": [{
                     "city": "ADDIS ABABA",
                     "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
                 },
@@ -94,7 +98,7 @@
                 }, 
                 "image": "/public/cups coffee/pngwing.com (13).png",
                 "description": "Description for offer 1" ,
-                "typeLocations": [{
+                "branches": [{
                     "city": "MOSCOW",
                     "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
                 },
@@ -120,7 +124,7 @@
                 }, 
                 "image": "/public/cups coffee/pngwing.com (13).png",
                 "description": "Description for offer 1",
-                "typeLocations": [{
+                "branches": [{
                     "city": "MOSCOW",
                     "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
                 },
@@ -146,7 +150,7 @@
                 }, 
                 "image": "/public/cups coffee/pngwing.com (13).png",
                 "description": "Description for offer 1",
-                "typeLocations": [{
+                "branches": [{
                     "city": "MOSCOW",
                     "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
                 },
@@ -172,7 +176,7 @@
                 }, 
                 "image": "/public/cups coffee/pngwing.com (13).png",
                 "description": "Description for offer 1",
-                "typeLocations": [{
+                "branches": [{
                     "city": "MOSCOW",
                     "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
                 },
@@ -204,7 +208,7 @@
                 }, 
                 "image": "/public/cups coffee/pngwing.com (4).png", 
                 "description": "Description for offer 2",
-                "typeLocations": [{
+                "branches": [{
                     "city": "MOSCOW",
                     "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
                 },
@@ -230,7 +234,7 @@
                 }, 
                 "image": "/public/cups coffee/pngwing.com (4).png", 
                 "description": "Description for offer 2",
-                "typeLocations": [{
+                "branches": [{
                     "city": "MOSCOW",
                     "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
                 },
@@ -256,7 +260,7 @@
                 }, 
                 "image": "/public/cups coffee/pngwing.com (4).png", 
                 "description": "Description for offer 2",
-                "typeLocations": [{
+                "branches": [{
                     "city": "MOSCOW",
                     "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
                 },
@@ -282,7 +286,7 @@
                 }, 
                 "image": "/public/cups coffee/pngwing.com (4).png", 
                 "description": "Description for offer 2",
-                "typeLocations": [{
+                "branches": [{
                     "city": "MOSCOW",
                     "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
                 },
@@ -308,7 +312,7 @@
                 }, 
                 "image": "/public/cups coffee/pngwing.com (4).png", 
                 "description": "Description for offer 2",
-                "typeLocations": [{
+                "branches": [{
                     "city": "MOSCOW",
                     "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
                 },
@@ -334,7 +338,7 @@
                 }, 
                 "image": "/public/cups coffee/pngwing.com (4).png", 
                 "description": "Description for offer 2",
-                "typeLocations": [{
+                "branches": [{
                     "city": "MOSCOW",
                     "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
                 },
@@ -365,7 +369,7 @@
                 }, 
                 "image": "/public/cups coffee/pngwing.com (9).png", 
                 "description": "Description for offer 3",
-                "typeLocations": [{
+                "branches": [{
                     "city": "MOSCOW",
                     "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
                 },
@@ -391,7 +395,7 @@
                 }, 
                 "image": "/public/cups coffee/pngwing.com (9).png", 
                 "description": "Description for offer 3",
-                "typeLocations": [{
+                "branches": [{
                     "city": "MOSCOW",
                     "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
                 },
@@ -417,7 +421,7 @@
                 }, 
                 "image": "/public/cups coffee/pngwing.com (9).png", 
                 "description": "Description for offer 3",
-                "typeLocations": [{
+                "branches": [{
                     "city": "MOSCOW",
                     "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
                 },
@@ -443,7 +447,7 @@
                 }, 
                 "image": "/public/cups coffee/pngwing.com (9).png", 
                 "description": "Description for offer 3",
-                "typeLocations": [{
+                "branches": [{
                     "city": "MOSCOW",
                     "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
                 },
@@ -474,7 +478,7 @@
                 }, 
                 "image": "/public/cups coffee/pngwing.com (11).png",
                 "description": "Description for offer 4",
-                "typeLocations": [{
+                "branches": [{
                     "city": "MOSCOW",
                     "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
                 },
@@ -500,7 +504,7 @@
                 }, 
                 "image": "/public/cups coffee/pngwing.com (11).png",
                 "description": "Description for offer 4",
-                "typeLocations": [{
+                "branches": [{
                     "city": "MOSCOW",
                     "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
                 },
@@ -526,7 +530,7 @@
                 }, 
                 "image": "/public/cups coffee/pngwing.com (11).png",
                 "description": "Description for offer 4",
-                "typeLocations": [{
+                "branches": [{
                     "city": "MOSCOW",
                     "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
                 },
@@ -552,7 +556,7 @@
                 }, 
                 "image": "/public/cups coffee/pngwing.com (11).png",
                 "description": "Description for offer 4",
-                "typeLocations": [{
+                "branches": [{
                     "city": "MOSCOW",
                     "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
                 },
@@ -578,7 +582,7 @@
                 }, 
                 "image": "/public/cups coffee/pngwing.com (11).png",
                 "description": "Description for offer 4",
-                "typeLocations": [{
+                "branches": [{
                     "city": "MOSCOW",
                     "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
                 },
@@ -604,7 +608,7 @@
                 }, 
                 "image": "/public/cups coffee/pngwing.com (11).png",
                 "description": "Description for offer 4",
-                "typeLocations": [{
+                "branches": [{
                     "city": "MOSCOW",
                     "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
                 },
@@ -630,7 +634,7 @@
                 }, 
                 "image": "/public/cups coffee/pngwing.com (11).png",
                 "description": "Description for offer 4",
-                "typeLocations": [{
+                "branches": [{
                     "city": "MOSCOW",
                     "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
                 },
@@ -656,7 +660,7 @@
                 }, 
                 "image": "/public/cups coffee/pngwing.com (11).png",
                 "description": "Description for offer 4",
-                "typeLocations": [{
+                "branches": [{
                     "city": "MOSCOW",
                     "description": "Indulge in the perfect blend of coffee and ice - the Frappuccino"
                 },

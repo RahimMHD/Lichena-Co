@@ -3,6 +3,7 @@ import { IoIosArrowForward } from 'react-icons/io'
 import gsap from 'gsap'
 import myJsonData from '../data/dataIngrediant.json'
 import { IoIosArrowForward as ArrowIcon } from 'react-icons/io'
+import Locationsinfo from './locationsinfo'
 
 // Inline the card so we control keys properly
 function Card({ offer, position }: { offer: any, position: number }) {
@@ -65,12 +66,21 @@ function Card({ offer, position }: { offer: any, position: number }) {
     )
 }
 
-function OfferSection() {
+interface OfferSectionProps {
+    listOffers: number
+    setListOffers: React.Dispatch<React.SetStateAction<number>>
+    centerIndex: number
+    setCenterIndex: React.Dispatch<React.SetStateAction<number>>
+}
+
+function OfferSection({ listOffers, setListOffers, centerIndex, setCenterIndex }: OfferSectionProps) {
     const [selectedOption, setSelectedOption] = useState<string>('DRINKS')
-    const [listOffers, setListOffers] = useState<number>(0)
-    const [centerIndex, setCenterIndex] = useState<number>(0)
+    // const [listOffers, setListOffers] = useState<number>(0)
+    // const [centerIndex, setCenterIndex] = useState<number>(0)
     const isAnimatingRef = useRef<boolean>(false)
 
+    
+    
     const categories = [
         { label: 'DRINKS', index: 0 },
         { label: 'FOOD', index: 1 },
@@ -94,7 +104,7 @@ function OfferSection() {
     const scrollToRight = () => {
         if (isAnimatingRef.current) return
         isAnimatingRef.current = true
-        setCenterIndex(prev => (prev + 1) % total)
+        setCenterIndex((prev: number) => (prev + 1) % total)
         setTimeout(() => { isAnimatingRef.current = false }, 650)
     }
 
@@ -111,6 +121,10 @@ function OfferSection() {
         setCenterIndex(0)
     }
 
+    // Inside OfferSection, get the current center card's branches:
+    // const centerCard = cards[centerIndex]
+    // const currentBranches: { city: string; description: string }[] = centerCard?.branches ?? [{ city: "No branches", description: "No description" }]
+    
     return (
         <main className='flex flex-col justify-center items-center w-full min-h-[800px] rounded-3xl pb-2'>
             {/* Category tabs */}
@@ -158,6 +172,8 @@ function OfferSection() {
                     className='absolute right-4 top-1/2 -translate-y-1/2 z-20 rounded-full bg-[#007545] text-white cursor-pointer hover:scale-125 transition-all duration-200'
                 />
             </div>
+
+            
         </main>
     )
 }
