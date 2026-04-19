@@ -1,15 +1,18 @@
-import Locationsinfo from "./locationsinfo"
+// import Locationsinfo from "./locationsinfo"
 
 
-function LocationsCof() {
 
-    return (
-        <div className="mb-32">
-            <div>
-                <Locationsinfo />
-            </div>
-        </div>
-    )
-}
+// function LocationsCof({ branches }: LocationsCofProps) {
 
-export default LocationsCof
+//     console.log("Branches in LocationsCof:", branches)
+
+//     return (
+//         <div className="mb-32">
+//             <div>
+//                 <Locationsinfo branches={branches} />
+//             </div>
+//         </div>
+//     )
+// }
+
+// export default LocationsCof
