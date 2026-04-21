@@ -2,7 +2,7 @@ import { BiArrowFromLeft } from "react-icons/bi"
 
 function ContactInfo() {
     return (
-        <div className="mt-36 relative">
+        <div className="mt-36 mb-20 relative">
             <div className="-ml-28 mb-28 w-[120%] h-24 bg-[#007545] flex justify-between gap-30 items-center text-4xl font-bold">
                 <h3>LECHENA&CO</h3>
                 <h3>LECHENA&CO</h3>
@@ -50,9 +50,9 @@ function ContactInfo() {
                 </div>
             </div>
 
-                <h2 className="text-[270px] w-full h-[220px] flex justify-center items-center font-bold tracking-wider text-[#ffffff80] p-0 -mt-40">CONTACT</h2>
-            {/* <div className="w-full h-[250px] relative flex items-center justify-center -mt-20"> */}
-            {/* </div>     */}
+            <p className="text-[270px] w-full absolute top-[900px] left-0 flex justify-center font-bold tracking-wider text-[#ffffff80] p-0 m-0">
+                CONTACT
+            </p>
         </div>
     )
 }
